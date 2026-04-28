@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상벌점 VOC 리포트 - 잇올영업본부</title>
+    <style>
+        :root {
+            --primary-color: #1a3a5f;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --bg-color: #f4f7f9;
+            --reg-bg: #fff9db;
+            --svc-bg: #e3f2fd;
+            --evt-bg: #f3e5f5;
+            --total-bg: #f8f9fa;
+        }
+
+        body { font-family: 'Malgun Gothic', sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; background-color: var(--bg-color); }
+        .container { max-width: 1200px; margin: auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        
+        header { text-align: center; margin-bottom: 20px; border-bottom: 3px solid var(--primary-color); padding-bottom: 20px; }
+        h1 { color: var(--primary-color); margin: 0; font-size: 2em; }
+
+        .tabs { display: flex; margin-bottom: 30px; border-bottom: 2px solid #ddd; }
+        .tab-button { 
+            padding: 12px 24px; 
+            cursor: pointer; 
+            border: none; 
+            background: #eee; 
+            font-size: 1em; 
+            font-weight: bold;
+            transition: 0.3s;
+            margin-right: 5px;
+            border-radius: 8px 8px 0 0;
+            color: #666;
+        }
+        .tab-button.active { background: var(--primary-color); color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .info-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .info-table td { padding: 10px; border: 1px solid #ddd; }
+        .info-label { background: #f8f9fa; font-weight: bold; width: 15%; text-align: center; }
+
+        .insight-box { background: #fff; border: 1px solid var(--secondary-color); padding: 20px; border-radius: 8px; margin: 30px 0; border-left: 8px solid var(--secondary-color); }
+        .insight-box h3 { margin-top: 0; color: var(--secondary-color); }
+
+        h2 { border-left: 5px solid var(--primary-color); padding-left: 15px; color: var(--primary-color); margin-top: 40px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #dee2e6; padding: 12px; text-align: center; font-size: 0.95em; }
+        th { background: #f1f3f5; font-weight: bold; }
+        
+        .summary-table { margin-bottom: 40px; border: 2px solid var(--primary-color); }
+        .summary-table th { background-color: var(--primary-color); color: white; }
+        .summary-total { background-color: #eee; font-weight: bold; }
+
+        .type-reg { background-color: var(--reg-bg); font-weight: bold; color: #856404; }
+        .type-svc { background-color: var(--svc-bg); font-weight: bold; color: #004085; }
+        .type-evt { background-color: var(--evt-bg); font-weight: bold; color: #4a148c; }
+        .total-row { background-color: var(--total-bg); font-weight: bold; border-top: 2px solid #333; }
+        
+        .text-left { text-align: left; }
+        .score-val { font-family: 'Consolas', monospace; font-weight: bold; }
+        .plus { color: #2ecc71; }
+        .minus { color: #e74c3c; }
+        
+        .event-list { list-style: none; padding: 0; margin: 0; text-align: left; }
+        .event-list li { margin-bottom: 10px; }
+        .event-main { font-weight: bold; color: var(--primary-color); display: block; margin-bottom: 5px; }
+        .event-sub { font-size: 0.9em; color: #555; padding-left: 10px; border-left: 2px solid #ddd; }
+        .highlight-text { color: var(--accent-color); font-weight: bold; }
+
+        footer { margin-top: 50px; text-align: center; font-size: 0.85em; color: #999; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>&lt;상벌점 VOC 리포트&gt;</h1>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-button active" onclick="openTab(event, 'tab1')">상벌점 발급 기록</button>
+        <button class="tab-button" onclick="openTab(event, 'tab2')">상벌점 VOC 기록</button>
+        <button class="tab-button" onclick="openTab(event, 'tab3')">규정 변동 기록</button>
+        <button class="tab-button" onclick="openTab(event, 'tab4')">상점 이벤트 내역</button>
+        <button class="tab-button" onclick="openTab(event, 'tab5')">그룹별 시뮬레이션</button>
+        <button class="tab-button" onclick="openTab(event, 'tab6')">결론 및 제언</button>
+    </div>
+
+    <div id="tab1" class="tab-content active">
+        <table class="info-table">
+            <tr>
+                <td class="info-label">주관 부서</td>
+                <td>잇올영업본부</td>
+                <td class="info-label">작성일자</td>
+                <td>2026.04.24</td>
+            </tr>
+            <tr>
+                <td class="info-label">분석 대상</td>
+                <td colspan="3">2026년 1월 ~ 4월 상벌점 발급 기록 (항목 구분 최적화)</td>
+            </tr>
+        </table>
+
+        <div class="insight-box">
+            <h3>💡 주요 분석 인사이트</h3>
+            <ul>
+                <li><b>상점의 핵심:</b> '개근'과 '휴일 등원'이 건수와 점수 합산에서 큰 비중을 차지합니다.</li>
+                <li><b>이벤트 상벌점 연계:</b> 상점에서는 하원 이벤트/챌린지(적립)가, 벌점에서는 상점 자판기/구매(소진)가 각각 활발히 운영되고 있습니다.</li>
+                <li><b>벌점의 핵심:</b> 지각 및 출결 위반으로 인한 감점이 가장 크며, 엄격한 관리가 유지되고 있습니다.</li>
+                <li><b>서비스/행정 관리 강화:</b> 시스템 자동 하원 처리는 하원 절차 미숙지로 발생하므로, 학생 대상 하원 방법 안내 및 교육 강화가 필요합니다.</li>
+                <li><b>종합:</b> 상벌점 발급에 있어 큰 불균형은 보이지 않습니다.</li>
+            </ul>
+        </div>
+
+        <section>
+            <h2>0. 데이터 발급 총괄 요약</h2>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>총 건수</th>
+                        <th>점수 합계</th>
+                        <th>전체 대비 비율(건수)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="summary-total">
+                        <td>전체 (Overall)</td>
+                        <td>347,711 건</td>
+                        <td class="score-val plus">304,209 점</td>
+                        <td>100.0%</td>
+                    </tr>
+                    <tr>
+                        <td>상점 (Reward)</td>
+                        <td>194,063 건</td>
+                        <td class="score-val plus">862,961 점</td>
+                        <td>55.8%</td>
+                    </tr>
+                    <tr>
+                        <td>벌점 (Penalty)</td>
+                        <td>153,648 건</td>
+                        <td class="score-val minus">-558,752 점</td>
+                        <td>44.2%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>1. 상점(Reward) 상세 분석</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>항목별 분류</th>
+                        <th>건수</th>
+                        <th>점수 합</th>
+                        <th>비율</th>
+                        <th>참고사항</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="5" class="type-reg">생활 규정<br>관련</td>
+                        <td>휴일 학습 및 랭킹 우수</td>
+                        <td>73,123</td>
+                        <td class="score-val">193,400</td>
+                        <td>37.7%</td>
+                        <td class="text-left">휴일 등원 시간 달성 및 랭킹 포상</td>
+                    </tr>
+                    <tr>
+                        <td>정규 출결 성실도</td>
+                        <td>67,021</td>
+                        <td class="score-val">452,725</td>
+                        <td>34.5%</td>
+                        <td class="text-left">일주일/한달 개근 보상</td>
+                    </tr>
+                    <tr>
+                        <td>기기/시설 및 선행</td>
+                        <td>12,902</td>
+                        <td class="score-val">56,910</td>
+                        <td>6.7%</td>
+                        <td class="text-left">교실 미화, 선행 사례 등</td>
+                    </tr>
+                    <tr>
+                        <td>센터 설문 참여</td>
+                        <td>3,931</td>
+                        <td class="score-val">19,427</td>
+                        <td>2.0%</td>
+                        <td class="text-left">각종 만족도 조사 참여</td>
+                    </tr>
+                    <tr>
+                        <td>학습 및 성적 우수</td>
+                        <td>2,155</td>
+                        <td class="score-val">5,166</td>
+                        <td>1.1%</td>
+                        <td class="text-left">단어/모의고사 성적 우수</td>
+                    </tr>
+                    <tr>
+                        <td class="type-evt">이벤트 관련</td>
+                        <td>이벤트 및 챌린지 적립</td>
+                        <td>448</td>
+                        <td class="score-val">1,580</td>
+                        <td>0.2%</td>
+                        <td class="text-left">하원 이벤트, 챌린지 참여, 책상정리 등</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" class="type-svc">서비스/행정<br>관련</td>
+                        <td>시스템 하원처리 취소</td>
+                        <td>32,084</td>
+                        <td class="score-val">127,527</td>
+                        <td>16.5%</td>
+                        <td class="text-left">자동 하원 기록 복구</td>
+                    </tr>
+                    <tr>
+                        <td>신청 취소 복구</td>
+                        <td>2,399</td>
+                        <td class="score-val">6,226</td>
+                        <td>1.2%</td>
+                        <td class="text-left">외출/시설 신청 취소</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2">상점 합계</td>
+                        <td>194,063</td>
+                        <td class="score-val">862,961</td>
+                        <td>100.0%</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>2. 벌점(Penalty) 상세 분석</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>항목별 분류</th>
+                        <th>건수</th>
+                        <th>점수 합</th>
+                        <th>비율</th>
+                        <th>참고사항</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="5" class="type-reg">생활 규정<br>관련</td>
+                        <td>출결 및 이동 위반</td>
+                        <td>74,665</td>
+                        <td class="score-val">-279,108</td>
+                        <td>48.6%</td>
+                        <td class="text-left">지각, 무단 미착석 등</td>
+                    </tr>
+                    <tr>
+                        <td>기타 생활 수칙 위반</td>
+                        <td>11,237</td>
+                        <td class="score-val">-69,103</td>
+                        <td>7.3%</td>
+                        <td class="text-left">태도 불량 등 수동 벌점</td>
+                    </tr>
+                    <tr>
+                        <td>수면 및 학습 태도</td>
+                        <td>1,747</td>
+                        <td class="score-val">-6,553</td>
+                        <td>1.1%</td>
+                        <td class="text-left">학습 시간 내 수면 등</td>
+                    </tr>
+                    <tr>
+                        <td>전자기기 오사용</td>
+                        <td>1,390</td>
+                        <td class="score-val">-18,194</td>
+                        <td>0.9%</td>
+                        <td class="text-left">휴대폰 미제출 등</td>
+                    </tr>
+                    <tr>
+                        <td>정숙 유지 및 취식</td>
+                        <td>301</td>
+                        <td class="score-val">-2,854</td>
+                        <td>0.2%</td>
+                        <td class="text-left">교실 내 대화, 소음, 취식 등</td>
+                    </tr>
+                    <tr>
+                        <td class="type-evt">이벤트 관련</td>
+                        <td>이벤트 참여(상점 소모)</td>
+                        <td>122</td>
+                        <td class="score-val">-11,150</td>
+                        <td>0.1%</td>
+                        <td class="text-left">상점 자판기(굿즈 구매), 상점 쓰는 상점 등</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" class="type-svc">서비스 이용<br>및 행정</td>
+                        <td>외출 및 시설 신청</td>
+                        <td>37,378</td>
+                        <td class="score-val">-102,150</td>
+                        <td>24.3%</td>
+                        <td class="text-left">외출권/공용공간 신청 차감</td>
+                    </tr>
+                    <tr>
+                        <td>시스템 자동 하원</td>
+                        <td>26,930</td>
+                        <td class="score-val">-80,790</td>
+                        <td>17.5%</td>
+                        <td class="text-left">미퇴실 자동 하원 처리 벌점</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2">벌점 합계</td>
+                        <td>153,648</td>
+                        <td class="score-val">-558,752</td>
+                        <td>100.0%</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div id="tab2" class="tab-content">
+        <table class="info-table">
+            <tr>
+                <td class="info-label">주관 부서</td>
+                <td>잇올영업본부</td>
+                <td class="info-label">작성일자</td>
+                <td>2026.04.24</td>
+            </tr>
+            <tr>
+                <td class="info-label">분석 대상</td>
+                <td colspan="3">2025년 ~ 2026년 4월 상벌점 VOC 인입 기록 (총 2,591건)</td>
+            </tr>
+        </table>
+
+        <div class="insight-box">
+            <h3>💡 VOC 주요 분석 인사이트</h3>
+            <ul>
+                <li><b>벌점 민원의 증가:</b> 전체 VOC 중 <b>'벌점' 관련 문의가 63.0%</b>를 차지합니다. 학생들은 상점 적립 문의보다 내점 차감에 비교적 민감하게 반응하고 있습니다.</li>
+                <li><b>시스템 및 기능 개선의 필요성:</b> '앱 오류', '하원 버튼 미활성화' 등 <b>시스템/기능 관련 불만 및 건의가 전체의 26.4%</b>를 차지합니다. 앱 기능의 경우 점점 개선되고 있으며, 앞으로도 지속적으로 앱 안정화 및 UI 고도화가 필요합니다.</li>
+                <li><b>규정 불만보다는 정정/단순 문의 위주:</b> 제도나 규정 자체에 대한 불만(10.9%)보다는 '실수로 인한 벌점 취소 요청'(13.9%)이나 '상점 적립 누락 확인'(21.5%) 등 운영적 소통(단순 문의)의 성격이 비교적 강하게 나타납니다. 관리자 행정 처리 시 주의가 필요합니다.</li>
+            </ul>
+        </div>
+
+        <section>
+            <h2>0. 연도별 VOC 인입 총괄</h2>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>2025년 (연간)</th>
+                        <th>2026년 (1~4월)</th>
+                        <th>총 인입 건수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="summary-total">
+                        <td>VOC 인입 건수</td>
+                        <td>1,368 건</td>
+                        <td>1,223 건</td>
+                        <td class="score-val plus">2,591 건</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>1. 키워드별 VOC 현황 분석 (E열 기준)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>키워드 분류</th>
+                        <th>건수</th>
+                        <th>비율</th>
+                        <th>특징 및 주요 내용</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="type-reg">벌점 관련</td>
+                        <td class="score-val">1,633 건</td>
+                        <td class="score-val minus">63.0%</td>
+                        <td class="text-left">가장 민감한 이슈. 지각, 버튼 미터치에 따른 자동 하원 벌점 소명 및 취소 요청 다수</td>
+                    </tr>
+                    <tr>
+                        <td class="type-svc">상점 관련</td>
+                        <td class="score-val">732 건</td>
+                        <td class="score-val plus">28.2%</td>
+                        <td class="text-left">상점 적립 조건 문의, 이벤트 및 설문조사 참여 후 상점 누락 확인 등 긍정적 관심</td>
+                    </tr>
+                    <tr>
+                        <td class="type-evt">상벌점 (통합/기타)</td>
+                        <td class="score-val">226 건</td>
+                        <td class="score-val">8.8%</td>
+                        <td class="text-left">상벌점 규정 전반에 대한 질의 및 제도의 가혹함에 대한 통합적 건의</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>합계</td>
+                        <td>2,591 건</td>
+                        <td>100.0%</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>2. 문의 카테고리별 상세 분석 (C열 내용 기준)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>카테고리 구분</th>
+                        <th>세부 항목 분류</th>
+                        <th>건수</th>
+                        <th>비율</th>
+                        <th>인사이트 및 분석 내용</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="type-reg">기능 건의 및 불만</td>
+                        <td>시스템/앱 기능 오류 및 건의</td>
+                        <td class="score-val">683 건</td>
+                        <td>26.4%</td>
+                        <td class="text-left">앱 먹통, 하원 버튼 비활성화, 출석 인식 실패 등 <b>기능적 문제 호소 및 시스템 개선 건의</b></td>
+                    </tr>
+                    <tr>
+                        <td class="type-svc" rowspan="3">단순 문의</td>
+                        <td>상점 적립 문의 및 누락</td>
+                        <td class="score-val">556 건</td>
+                        <td>21.5%</td>
+                        <td class="text-left">만족도 조사, 이벤트 등 참여 후 <b>상점 미지급에 대한 확인 요청</b></td>
+                    </tr>
+                    <tr>
+                        <td>벌점 취소 및 정정 요청</td>
+                        <td class="score-val">361 건</td>
+                        <td>13.9%</td>
+                        <td class="text-left">버튼 누락 실수, 불가피한 사유 등 <b>벌점 정상화 및 개인적 구제 요청</b></td>
+                    </tr>
+                    <tr>
+                        <td>기타 단순 문의</td>
+                        <td class="score-val">708 건</td>
+                        <td>27.3%</td>
+                        <td class="text-left">기타 상벌점 내역 단순 조회, 상점 사용처 및 소진 방법 문의 등 일반 상담</td>
+                    </tr>
+                    <tr>
+                        <td class="type-evt">규정 건의</td>
+                        <td>상벌점 규정 불만 및 건의</td>
+                        <td class="score-val">283 건</td>
+                        <td>10.9%</td>
+                        <td class="text-left">벌점 기준의 가혹함, 상점 획득의 어려움 등 <b>운영 정책 및 제도 자체에 대한 개선 요구</b></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2">합계</td>
+                        <td>2,591 건</td>
+                        <td>100.0%</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div id="tab3" class="tab-content">
+        <table class="info-table">
+            <tr>
+                <td class="info-label">주관 부서</td>
+                <td>잇올영업본부</td>
+                <td class="info-label">작성일자</td>
+                <td>2026.04.24</td>
+            </tr>
+            <tr>
+                <td class="info-label">분석 대상</td>
+                <td colspan="3">2025년 대비 2026년 상벌점 규정(생활매뉴얼) 변동 내역 추적 분석</td>
+            </tr>
+        </table>
+
+        <div class="insight-box">
+            <h3>💡 규정 변동에 따른 학생 예상 반응 (인사이트)</h3>
+            <ul>
+                <li><b>[종합 요약] 체계적인 면학 관리를 위해 벌점 기준이 강화·신설되고 상점 포상이 일부 개편됨에 따라, 학생들 입장에서는 비교적 상점 획득에 어려움을 체감할 수 있습니다.</b></li>
+                <li><b>포상 기준의 전국 단위 일원화:</b> 기존 각 센터별 모의고사 1등 포상 등이 전면 폐지되고 '전국 상위 20등'으로 일원화되었습니다. 이는 혜택을 받는 절대적인 인원 감소로 이어져, 중상위권 학생들의 성적 상점 획득 기대감이 다소 낮아질 수 있습니다.</li>
+                <li><b>생활 관리 기준의 세분화:</b> '휴대폰 전원 미종료(-1점)', '식사시간 외 무단 외출(-5점)' 등 세밀한 생활 관리 항목이 신설되었습니다. 관리가 한층 촘촘해진 만큼, 사소한 실수로 감점을 받은 학생들의 아쉬움 섞인 VOC가 일부 증가할 수 있습니다.</li>
+                <li><b>운영 총괄팀을 위한 제언 (솔루션):</b> 변경된 규정의 관리적 정당성을 안내함과 동시에 학생들의 동기를 긍정적으로 이끌어내기 위해, 센터 자체적인 <b>'참여형 이벤트 상점(책상 정리, 하원 챌린지 등)'의 비중을 유연하게 활용하여 보완</b>해 주는 운영의 묘미가 필요합니다.</li>
+            </ul>
+        </div>
+
+        <section>
+            <h2>1. 벌점 규정 주요 변동 내역 (2025 → 2026)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>2025년 규정 (이전)</th>
+                        <th>2026년 규정 (변경)</th>
+                        <th>상세 변동 사항</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="type-reg">무단 외출</td>
+                        <td class="text-left">명시적 개별 항목 없음</td>
+                        <td class="text-left"><b>[신설]</b> 식사시간 외 센터/캠프 무단 외출 시 (쉬는시간 포함)</td>
+                        <td class="score-val minus">-5점 신설</td>
+                    </tr>
+                    <tr>
+                        <td class="type-reg">휴대폰 전원<br>미종료</td>
+                        <td class="text-left">휴대폰 미제출(-30) 항목 내 '전원 OFF 후 제출 필수'로 안내됨</td>
+                        <td class="text-left"><b>[항목 신설]</b> 휴대폰 전원을 끄지 않고 제출한 경우 별도 감점으로 분리</td>
+                        <td class="score-val minus">-1점 신설</td>
+                    </tr>
+                    <tr>
+                        <td class="type-svc">지각 기준<br>명확화</td>
+                        <td class="text-left">지각 시 (-3점)</td>
+                        <td class="text-left"><b>[기준 명확화]</b> 지각 및 복귀 지각 시 (-3점)</td>
+                        <td class="score-val">-3점 (점수 동일)</td>
+                    </tr>
+                    <tr>
+                        <td class="type-reg">휴대폰 미제출<br>(액세서리)</td>
+                        <td class="text-left">등원 시 전원 OFF 후 제출 필수</td>
+                        <td class="text-left"><b>[기준 강화]</b> 휴대폰 액세서리 제거 후 제출 명시 (키링, 그립톡 등)</td>
+                        <td class="score-val">-30점 (점수 동일)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>2. 상점 규정 주요 변동 내역 (2025 → 2026)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>2025년 규정 (이전)</th>
+                        <th>2026년 규정 (변경)</th>
+                        <th>상세 변동 사항</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="type-evt">서바이벌 프로<br>모의고사 포상</td>
+                        <td class="text-left">해당 항목 없음</td>
+                        <td class="text-left"><b>[신설]</b> (전국) 잇올 공식모의고사 (서바이벌 프로) 전국 상위 20등 이내 추가</td>
+                        <td class="score-val plus">+20~+1점 신설</td>
+                    </tr>
+                    <tr>
+                        <td class="type-evt">공식 모의고사<br>센터 내 1등</td>
+                        <td class="text-left">본인 센터 내 1등 시 상점 부여 (+3점)</td>
+                        <td class="text-left"><b>[폐지]</b> 해당 포상 항목 삭제 (전국 단위 포상으로 일원화)</td>
+                        <td class="score-val minus">+3점 폐지</td>
+                    </tr>
+                    <tr>
+                        <td class="type-evt">빌보드 Top<br>센터 내 1등</td>
+                        <td class="text-left">6월, 9월 전국 빌보드 센터 내 1등 시 상점 부여 (+5점)</td>
+                        <td class="text-left"><b>[폐지]</b> 해당 포상 항목 삭제 (전국 단위 포상으로 일원화)</td>
+                        <td class="score-val minus">+5점 폐지</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div id="tab4" class="tab-content">
+        <table class="info-table">
+            <tr>
+                <td class="info-label">주관 부서</td>
+                <td>잇올영업본부</td>
+                <td class="info-label">작성일자</td>
+                <td>2026.04.24</td>
+            </tr>
+            <tr>
+                <td class="info-label">분석 대상</td>
+                <td colspan="3">2025년 ~ 2026년 상점 활용 이벤트 히스토리 및 비교 분석</td>
+            </tr>
+        </table>
+
+        <div class="insight-box">
+            <h3>📊 이벤트 운영 비교 분석</h3>
+            <ul>
+                <li><b>빈도:</b> 25년에는 하반기에 이벤트가 집중되었으나, 26년에는 2월부터 10월까지 격월로 진행하여 규칙적으로 상점 소진 기회 제공 중</li>
+                <li><b>소진 점수:</b> 25년에는 400점까지 상품이 존재하고, 26년에는 50, 80점대 저가형 보상을 신설해 상점이 많지 않아도 참여 가능하게 함</li>
+                <li><b>기대 효과:</b> 소액 상점으로도 교환 가능한 상품 굿즈가 늘어나 상점을 많이 모으지 못한 학생들도 <b>"나도 참여할 수 있다"</b>는 인식을 갖게 하여 상점 소진처에 대한 VOC 축소 기여</li>
+            </ul>
+        </div>
+
+        <section>
+            <h2>1. 이벤트 리스트</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">No.</th>
+                        <th>2025년</th>
+                        <th>2026년</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <ul class="event-list">
+                                <li>
+                                    <span class="event-main">[4월] 2025 잇올 상점 이벤트 (4/11~4/19)</span>
+                                    <span class="event-sub">→ 랜딩X 게시물 배포<br>· 300점: 강대K / 200점: 이감 엣지 / 100점: 수면패스</span>
+                                    <span class="event-sub highlight-text">▶ 58명 당첨 > 총 상점 14,100점 소진</span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="event-list">
+                                <li>
+                                    <span class="event-main">[2월] 상점 쓰는 상점 윈터 (2/2~2/8)</span>
+                                    <span class="event-sub">· 100점: 2026 썸머스쿨 우선 대기권, 이감국어 2026 시즌2, CIRCUIT, 테라코타</span>
+                                    <span class="event-sub highlight-text">▶ 29명 당첨 > 총 상점 2,900점 소진</span>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>
+                            <ul class="event-list">
+                                <li>
+                                    <span class="event-main">[7월] 상점 쓰는 상점 (7/4~7/31)</span>
+                                    <span class="event-sub">· 400점: 담요 / 300점: 키링 / 200점: 테라코타 / 100점: 캘린더</span>
+                                    <span class="event-sub highlight-text">▶ 35명 당첨 > 총 상점 7,200점 소진</span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="event-list">
+                                <li>
+                                    <span class="event-main">[4월] 잇올 상점 자판기 (4/20~4/25)</span>
+                                    <span class="event-sub">· 100점: 2027 상상아카이브, 상상 이매진 제로, 2026 킬캠 6평대비</span>
+                                    <span class="event-sub">· 80점: 국어 키링, 수학 키링 / 50점: 테라코타, 잇올 에코백</span>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>
+                            <ul class="event-list">
+                                <li>
+                                    <span class="event-main">[7월] 2025 타임어택 상점 이벤트 (7/22~7/24)</span>
+                                    <span class="event-sub">· 100점: 이감 시즌2 (1,2회차)</span>
+                                    <span class="event-sub highlight-text">▶ 198명 당첨 > 총 상점 19,800점 소진</span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="event-list">
+                                <li>
+                                    <span class="event-main">[6월] 잇올 상점 랜덤박스 (미정)</span>
+                                    <span class="event-sub">· 6월 2주차 진행 예정<br>· 굿즈(담요, 키링, 스티커 등) 및 콘텐츠 활용 예정</span>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>
+                            <ul class="event-list">
+                                <li>
+                                    <span class="event-main">[9월] 상점 쓰는 상점 시즌2 (9/8~9/21)</span>
+                                    <span class="event-sub">· 400점: 담요<br>· 100점: 강대모고X, 상상 아카이브, 리마스터링, 이감 2026 시즌2, 테라코타</span>
+                                    <span class="event-sub highlight-text">▶ 774명 당첨 > 총 상점 78,000점 소진</span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="event-list">
+                                <li>
+                                    <span class="event-main">[8월] 상점 쓰는 상점 (미정)</span>
+                                    <span class="event-sub">· 8월 초~중순 진행 예정<br>· 굿즈(담요, 키링, 스티커 등) 및 콘텐츠 활용 예정</span>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>
+                            <ul class="event-list">
+                                <li>
+                                    <span class="event-main">[10월] 타임어택 시즌2 (10/15~10/17)</span>
+                                    <span class="event-sub">· 400점: 담요 / 100점: 이감 시즌3, 이감 시즌4, 시크릿 박스</span>
+                                    <span class="event-sub highlight-text">▶ 99명 당첨 > 총 상점 10,800점 소진</span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="event-list">
+                                <li>
+                                    <span class="event-main">[10월] 상점 타임어택 (미정)</span>
+                                    <span class="event-sub">· 10월 초 진행 예정<br>· 굿즈(담요, 키링, 스티커 등) 및 콘텐츠 활용 예정</span>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div id="tab5" class="tab-content">
+        <table class="info-table">
+            <tr>
+                <td class="info-label">주관 부서</td>
+                <td>잇올영업본부</td>
+                <td class="info-label">작성일자</td>
+                <td>2026.04.24</td>
+            </tr>
+            <tr>
+                <td class="info-label">분석 대상</td>
+                <td colspan="3">학생 유형(A~D)별 상벌점 누적 시뮬레이션 및 규정 체감 난이도 분석</td>
+            </tr>
+        </table>
+
+        <div class="insight-box">
+            <h3>💡 결론: 2026년 상점 누적 불만(VOC) 증가 사유 분석</h3>
+            <ul>
+                <li><b>실제 수치적 팩트:</b> 규정 총량상 일반 학생(B그룹)이나 무단 행동이 잦은 학생(C그룹)의 누적 손실은 2025년 대비 2026년에 오히려 <b>개선되거나 비슷</b>합니다. (출결미인증 벌점 -5점 → -3점 완화 등)</li>
+                <li><b>불만 증가의 진짜 원인 (체감 난이도 상승):</b>
+                    <ul>
+                        <li><b>혜택의 양극화:</b> 랭킹 및 빌보드 등 대량의 상점 획득 기회가 극상위권(S, A그룹)에 집중되어 있어 일반 학생의 체감 수혜율이 낮습니다. (공부시간/몰입시간 일간 1위 중복 불가 등)</li>
+                        <li><b>즉각적인 체감 차감:</b> 일상적으로 사용하는 '외출권' 소진 점수가 2점에서 3점으로 증가하여 피부에 와닿는 박탈감이 큽니다. 반면, 출결미인증 완화는 혜택으로 느끼지 못합니다.</li>
+                        <li><b>경쟁 심화:</b> 실전바이오리듬 일정 조기 도입으로 등원/몰입 시간의 전반적 상향 평준화가 일어났고, 이에 따라 동일한 상점을 획득하기 위한 실질적 진입 장벽이 높아졌습니다.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <section>
+            <h2>1. 시뮬레이션 대상 그룹핑 조건</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>그룹</th>
+                        <th>생활 패턴 특징 요약</th>
+                        <th>예상 포지션</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="type-evt"><b>S 그룹</b></td>
+                        <td class="text-left">A그룹 조건 충족 + 휴일 10시간 이상 + 매일 얼리버드 1등 + 매일 공부/몰입시간 1등 + 항상 전국 상위 20등 이내</td>
+                        <td>극상위권 / 상점 독식형</td>
+                    </tr>
+                    <tr>
+                        <td class="type-svc"><b>A 그룹</b></td>
+                        <td class="text-left">정상 등하원, 외출권 미사용, 개근상 매주 획득, 휴일 6시간 이상 학습하는 모범 N수생</td>
+                        <td>상위권 / 성실형</td>
+                    </tr>
+                    <tr>
+                        <td class="type-reg"><b>B 그룹</b></td>
+                        <td class="text-left">월 1회 개근상 획득. 주 1~2회 버튼 미인증, 주 1회 1교시 외출권 사용, 휴일 미등원하는 고등학생</td>
+                        <td>중위권 / 일반형</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: #7f8c8d;">C 그룹</td>
+                        <td class="text-left">개근상 없음. 주 1~2회 지각/미착석, 주 2~3회 버튼 미인증, 잦은 외출 및 공용공간 초과 사용</td>
+                        <td>하위권 / 벌점 누적형</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>2. 2026년 기준 시뮬레이션 결과 요약</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>그룹</th>
+                        <th>1개월 순잔액</th>
+                        <th>33일 누적</th>
+                        <th>66일 누적</th>
+                        <th>99일 누적</th>
+                        <th>상점 100점 도달 소요 시일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="type-evt"><b>S</b></td>
+                        <td class="score-val plus">+104 점 (+ 빌보드)</td>
+                        <td class="score-val plus">+117 점</td>
+                        <td class="score-val plus">+249 점</td>
+                        <td class="score-val plus">+384 점</td>
+                        <td><b>약 28일 (1개월 내)</b></td>
+                    </tr>
+                    <tr>
+                        <td class="type-svc"><b>A</b></td>
+                        <td class="score-val plus">+44 ~ +48 점</td>
+                        <td class="score-val plus">+47 ~ +48 점</td>
+                        <td class="score-val plus">+108 ~ +117 점</td>
+                        <td class="score-val plus">+172 ~ +186 점</td>
+                        <td><b>약 57 ~ 63일 (약 2개월)</b></td>
+                    </tr>
+                    <tr>
+                        <td class="type-reg"><b>B</b></td>
+                        <td class="score-val minus">-21 ~ -33 점</td>
+                        <td class="score-val minus">-21 ~ -37 점</td>
+                        <td class="score-val minus">-40 ~ -67 점</td>
+                        <td class="score-val minus">-59 ~ -101 점</td>
+                        <td><span style="color:red; font-weight:bold;">도달 불가 (지속 마이너스)</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; color: #7f8c8d;">C</td>
+                        <td class="score-val minus">-92 ~ -212 점</td>
+                        <td class="score-val minus">-107 ~ -222 점</td>
+                        <td class="score-val minus">-205 ~ -427 점</td>
+                        <td class="score-val minus">-306 ~ -645 점</td>
+                        <td><span style="color:red; font-weight:bold;">도달 불가 (지속 마이너스)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>3. 2025년 vs 2026년 핵심 비교 분석</h2>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>그룹</th>
+                        <th>25년 (1개월 순잔액)</th>
+                        <th>26년 (1개월 순잔액)</th>
+                        <th>증감 및 원인 분석</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>S / A</b></td>
+                        <td>변동 없음</td>
+                        <td>변동 없음</td>
+                        <td class="text-left">규정 변화의 영향을 거의 받지 않으며 안정적인 획득 가능</td>
+                    </tr>
+                    <tr>
+                        <td><b>B</b></td>
+                        <td class="score-val">-25 ~ -45 점</td>
+                        <td class="score-val plus">-21 ~ -33 점</td>
+                        <td class="text-left"><b>[26년이 유리]</b> 외출권 강화(-3점)보다 출결미인증 완화(-3점)의 혜택이 더 크게 작용</td>
+                    </tr>
+                    <tr>
+                        <td><b>C</b></td>
+                        <td class="score-val">-92 ~ -196 점</td>
+                        <td class="score-val minus">-92 ~ -212 점</td>
+                        <td class="text-left"><b>[비슷하거나 약간 불리]</b> 26년에 지각(-3점)과 무단미착석(-5점)이 분리 적용되며 감점폭 유지</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div id="tab6" class="tab-content">
+        <table class="info-table">
+            <tr>
+                <td class="info-label">주관 부서</td>
+                <td>잇올영업본부</td>
+                <td class="info-label">작성일자</td>
+                <td>2026.04.24</td>
+            </tr>
+            <tr>
+                <td class="info-label">분석 대상</td>
+                <td colspan="3">상벌점 VOC 리포트 종합 결론 및 운영 개선 방안 도출</td>
+            </tr>
+        </table>
+
+        <section>
+            <h2>1. 종합 분석 결과</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>분석 결과 및 현황</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="info-label text-left" style="width:20%"><b>데이터상 불균형 여부</b></td>
+                        <td class="text-left">변동된 2026년 규정상 <b>수치적인 심각한 절대적 불균형은 발견되지 않았습니다.</b> 오히려 출결미인증 감점 완화 등으로 일반 학생들의 누적 손실은 전년 대비 개선되거나 유지되는 추세입니다.</td>
+                    </tr>
+                    <tr>
+                        <td class="info-label text-left"><b>그룹별 체감 격차 발생</b></td>
+                        <td class="text-left"><b>학생 그룹별 체감 난이도의 격차</b>가 비교적 큽니다. 대량의 획득 기회(랭킹, 빌보드)는 상위권에 집중되는 반면, 일반 학생들은 외출권 차감 등 일상적인 포인트 감점을 더 빈번하고 민감하게 체감하고 있습니다.</td>
+                    </tr>
+                    <tr>
+                        <td class="info-label text-left"><b>행정/시스템적 감점 요인</b></td>
+                        <td class="text-left">단순 앱 기능 오류나 하원 절차 미숙지로 인한 시스템 자동 하원(벌점) 처리가 잦게 발생하여, 학생들 스스로 통제하기 힘든 규정 외적 요인에 대한 불만이 일부 가중되고 있습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>2. 리포트 발행 배경 (분석 목적)</h2>
+            <ul>
+                <li><b>주요 VOC 이슈:</b> "상점 쌓기가 너무 어렵다", "상점 모으기는 힘든데 상점 소진 이벤트는 왜 진행하는가?" 등 학생들의 지속적인 건의 및 불만 제기 발생</li>
+                <li><b>검증 목적:</b> 2026년 상벌점 규정 개편 이후, 실제 데이터상으로 <b>심각한 수치적 불균형이나 구조적 결함이 존재하는지 객관적으로 검증</b>하고 실질적인 대응 방안을 모색하기 위함</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>3. VOC 폭등의 심층적 원인 분석</h2>
+            <div class="insight-box" style="border-left-color: var(--accent-color); border-top: 1px solid var(--accent-color);">
+                <h3 style="color: var(--accent-color);">🚨 왜 2026년에 VOC가 폭등했는가?</h3>
+                <ul>
+                    <li><b>손실 회피 편향 (Loss Aversion):</b> 외출권 차감 상승(2→3점)은 학생들이 매일 선택하는 '세금 인상'처럼 선명하게 체감되는 반면, 출결 미인증 완화(-5→-3점)는 실수했을 때만 작동하므로 혜택으로 인지되지 못합니다.</li>
+                    <li><b>'로컬 히어로'의 소멸과 박탈감:</b> 센터별 1등 포상이 폐지되고 '전국 상위 20등'으로 일원화되면서, 일반 학생들은 현실적인 보상권에서 멀어졌다는 무기력함과 극상위권과의 상대적 박탈감을 크게 느낍니다.</li>
+                    <li><b>통제 불능에 대한 억울함:</b> 규정이 촘촘해진 상황에서 앱 기능 오류나 시스템 미작동 등 본인이 통제할 수 없는 요인으로 패널티를 받을 경우, 그 불만이 제도 자체의 가혹함에 대한 VOC로 표출됩니다.</li>
+                </ul>
+            </div>
+        </section>        
+
+        <section>
+            <h2>4. 향후 운영 제언 및 해결 방안 (Action Plan)</h2>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>분야</th>
+                        <th>세부 추진 방안</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="type-svc" style="width:20%;"><b>시스템 및<br>행정 고도화</b></td>
+                        <td class="text-left">
+                            <ul class="event-list">
+                                <li><span class="event-main">지속적인 앱 기능 및 시스템 고도화</span> <span class="event-sub">기능 오류로 인한 억울한 벌점 인입을 최소화하기 위해 IT 부서와 협력하여 앱 안정성 확보 및 UI 개선 지속</span></li>
+                                <li><span class="event-main">관리자 및 학생 양방향 교육 강화</span> <span class="event-sub">서비스 미숙으로 인한 불필요한 벌점 방지를 위해 신규 등원생 대상 O.T 교육 강화 및 센터별 하원 안내 프로세스 확립</span></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="type-evt"><b>체감 격차 완화<br>프로그램 운영</b></td>
+                        <td class="text-left">
+                            <ul class="event-list">
+                                <li><span class="event-main">센터 주도형 '참여형 상점 이벤트' 유도</span> <span class="event-sub">책상 정리, 하원 챌린지 등 누구나 노력하면 받을 수 있는 센터 자체 이벤트를 독려하여 일반 학생들의 상점 소외감 해소</span></li>
+                                <li><span class="event-main">소액 상점 소진처 지속 발굴</span> <span class="event-sub">현재 운영 중인 50~80점 단위의 저가 보상 라인업을 강화하여, 상점이 적은 학생들도 이벤트 혜택을 누릴 수 있는 경험 제공</span></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="type-reg"><b>데이터 기반<br>인식 개선</b></td>
+                        <td class="text-left">
+                            <ul class="event-list">
+                                <li><span class="event-main">데이터 투명성 제고 및 칭찬 상점 활용</span> <span class="event-sub">상점 발급의 70% 이상이 '성실도' 기반임을 투명하게 소통하고, 현장 매니저의 재량에 의한 '칭찬 상점' 권한을 확대하여 심리적 환기구 마련</span></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <footer>
+        &copy; 2026 ITALL Co., Ltd. 잇올영업본부 | 정량적 데이터 분석 보고서
+    </footer>
+</div>
+
+<script>
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        // 모든 탭 내용 숨기기
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        // 모든 탭 버튼 활성화 상태 제거
+        tablinks = document.getElementsByClassName("tab-button");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        // 선택된 탭 보여주고 버튼 활성화
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+</body>
+</html>
